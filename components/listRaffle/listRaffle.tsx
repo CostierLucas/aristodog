@@ -5,7 +5,7 @@ import {
   targetChainId,
 } from "../../WalletHelpers/contractVariables";
 import ContractAbiRaffle from "../../WalletHelpers/contractAbiRaffle.json";
-import { ethers } from "ethers";
+import { ethers, utils } from "ethers";
 import Countdown from "react-countdown";
 import Link from "next/link";
 import { BounceLoader } from "react-spinners";
@@ -86,7 +86,7 @@ const ListRaffle: React.FC = () => {
                       <div className="flex items-center">
                         <a
                           className="line-clamp-1 text-[#665F5F] hover:text-[#DB8511] text-sm mr-1 capitalize"
-                          href={`/single/?raffle=${index}`}
+                          href={`/single/?raffle=${raffle.length - index}`}
                         ></a>
                       </div>
                       <h2 className="text-left text-[#DB8511] line-clamp-1 text-xl"></h2>
@@ -104,16 +104,15 @@ const ListRaffle: React.FC = () => {
                             Price/Ticket
                           </strong>
                           <div className="text-right leading-none text-[#DB8511]  text-xl">
-                            {parseInt(item[4])} CRO
+                            {utils.formatEther(item[4])} CRO
                           </div>
                         </div>
                       </div>
-                      <Link href={`/single/?raffle=${index}`}>
+                      <Link href={`/single/?raffle=${raffle.length - index}`}>
                         <a className="bg-[#996520] block text-center py-3 mt-2 bg-gradient-to-t opacity-90 hover:opacity-100 text-white text-xl rounded-2xl border dark:to-transparent dark:from-transparent dark:border-2 transition-all">
                           View raffle
                           <div className="text-xs">
-                            Ends in{" "}
-                            <Countdown date={Date.now() + parseInt(item[1])} />
+                            Ends in <Countdown date={parseInt(item[1])} />
                           </div>
                         </a>
                       </Link>

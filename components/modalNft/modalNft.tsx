@@ -23,14 +23,14 @@ const ModalNft = ({
           </button>
         </div>
         <div>
-          <h1 className="text-2xl text-center text-white mb-10">NFTs</h1>
           <div className="lg:grid-cols-3 xl:grid-cols-4 grid grid-cols-1 gap-6 sm:grid-cols-2 md:gap-8 px-8">
             {tokensAllowed?.map((token, index) => (
               <div
-                className="card rounded-2xl overflow-hidden group md:hover:scale-[1.03] transition"
+                className="card rounded-2xl overflow-hidden group md:hover:scale-[1.03] transition cursor-pointer"
                 key={index}
                 onClick={() => chooseToken(token)}
               >
+                <img src="/bayc.png" alt="bayc" />
                 <p>{parseInt(token)}</p>
               </div>
             ))}
