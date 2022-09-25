@@ -8,7 +8,7 @@ import ContractAbiRaffle from "../../WalletHelpers/contractAbiRaffle.json";
 import { ethers } from "ethers";
 import { useRouter } from "next/router";
 
-const sectionRaffle: React.FC = () => {
+const SectionRaffle: React.FC = () => {
   const [signer, setSigner] = useState<ethers.Signer>();
   const [isContract, setIsContract] = useState<ethers.Contract>();
   const [raffleItem, setRaffleItem] = useState([]);
@@ -98,4 +98,4 @@ const sectionRaffle: React.FC = () => {
   );
 };
 
-export default sectionRaffle;
+export default SectionRaffle;

@@ -10,7 +10,7 @@ import Countdown from "react-countdown";
 import Link from "next/link";
 import { BounceLoader } from "react-spinners";
 
-const listRaffle: React.FC = () => {
+const ListRaffle: React.FC = () => {
   const [signer, setSigner] = useState<ethers.Signer>();
   const [isContract, setIsContract] = useState<ethers.Contract>();
   const [raffle, setRaffle] = useState<string[]>([]);
@@ -135,4 +135,4 @@ const listRaffle: React.FC = () => {
   );
 };
 
-export default listRaffle;
+export default ListRaffle;
