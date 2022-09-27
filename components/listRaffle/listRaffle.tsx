@@ -17,20 +17,6 @@ const ListRaffle: React.FC = () => {
   const context = useWeb3React<any>();
   const { account, provider, chainId } = context;
 
-  const renderer = ({
-    hours,
-    minutes,
-    seconds,
-  }: {
-    hours: any;
-    minutes: any;
-    seconds: any;
-  }) => (
-    <span>
-      {zeroPad(hours)}:{zeroPad(minutes)}:{zeroPad(seconds)}
-    </span>
-  );
-
   useEffect(() => {
     if (!!provider && chainId == targetChainId && !!account) {
       getDatas();

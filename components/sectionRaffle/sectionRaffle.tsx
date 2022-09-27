@@ -6,6 +6,7 @@ import {
 } from "../../WalletHelpers/contractVariables";
 import ContractAbiRaffle from "../../WalletHelpers/contractAbiRaffle.json";
 import { ethers } from "ethers";
+import { BeatLoader } from "react-spinners";
 import { useRouter } from "next/router";
 
 const SectionRaffle: React.FC = () => {
@@ -14,6 +15,7 @@ const SectionRaffle: React.FC = () => {
   const [raffleItem, setRaffleItem] = useState([]);
   const [numberOfTickets, setNumberOfTickets] = useState<number>(1);
   const [isParticipants, setIsParticipants] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const context = useWeb3React<any>();
   const { account, provider, chainId } = context;
   const router = useRouter();
@@ -86,15 +88,18 @@ const SectionRaffle: React.FC = () => {
 
   return (
     <div>
-      <div className="container-fluid pl-5 pr-5">
+      <div className="container-fluid pl-14 pr-14">
         <div className="w-full flex flex-col lg:flex-row mt-7">
           <div className="w-full lg:w-1/3 md:mr-8 px-8 pt-5 md:pt-0 md:px-0 self-start">
             <div>
-              <img src="/bayc.png" className="w-32" />
+              <img src="/bayc.png" className="w-100" />
             </div>
             <div className="flex justify-around mt-5">
               <div>
-                <button className="text-white" onClick={removeNumberOfTickets}>
+                <button
+                  className="text-white text-2xl"
+                  onClick={removeNumberOfTickets}
+                >
                   -
                 </button>
               </div>
@@ -102,7 +107,10 @@ const SectionRaffle: React.FC = () => {
                 <span className="text-white text-2xl">{numberOfTickets}</span>
               </div>
               <div>
-                <button className="text-white" onClick={addNumberOfTickets}>
+                <button
+                  className="text-white text-2xl"
+                  onClick={addNumberOfTickets}
+                >
                   +
                 </button>
               </div>

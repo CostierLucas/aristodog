@@ -11,6 +11,7 @@ import ContractAbiNft from "../../WalletHelpers/contractAbiNft.json";
 import { ethers } from "ethers";
 import ModalNft from "../modalNft/modalNft";
 import { toast } from "react-toastify";
+import { BeatLoader } from "react-spinners";
 
 interface IRaffle {
   price: string;
@@ -93,6 +94,7 @@ const FormRaffle: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       if (tokenSelected == "") {
@@ -112,9 +114,12 @@ const FormRaffle: React.FC = () => {
       );
 
       await tx.wait();
+      toast.success("Raffle created");
+      setLoading(false);
     } catch (e) {
       console.log(e);
     }
+    setLoading(false);
   };
 
   if (!account) {
@@ -258,7 +263,7 @@ const FormRaffle: React.FC = () => {
                                 opacity-90 hover:opacity-100 rounded-xl text-white text-xl font-bold transition"
                     type="submit"
                   >
-                    Create raffle
+                    {isLoading ? <BeatLoader color="#fff" /> : "Create raffle"}
                   </button>
                 ) : (
                   <button
@@ -267,7 +272,7 @@ const FormRaffle: React.FC = () => {
                     type="button"
                     onClick={approve}
                   >
-                    Approve first
+                    {isLoading ? <BeatLoader color="#fff" /> : "Approve first"}
                   </button>
                 )}
               </div>

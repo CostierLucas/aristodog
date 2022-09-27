@@ -13,7 +13,7 @@ const ConnectWallet = () => {
       {!account ? (
         <div>
           <button
-            className={styles.btnConnect}
+            className="h-[50px] w-full lg:w-auto px-5 md:py-0 rounded-xl text-white text-lg font-bold bg-orange-500 hover:bg-orange-400 transition duration-300"
             onClick={() => setOpenModal(!openModal)}
           >
             Connect wallet
@@ -21,7 +21,7 @@ const ConnectWallet = () => {
           {openModal && <Modal closeModal={setOpenModal} />}
         </div>
       ) : (
-        <p>
+        <p className="text-white font-bold bg-orange-500 px-5 rounded-xl ">
           {`${account.substring(0, 6)}...${account.substring(
             account.length - 4
           )}`}
