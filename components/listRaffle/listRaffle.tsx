@@ -6,7 +6,7 @@ import {
 } from "../../WalletHelpers/contractVariables";
 import ContractAbiRaffle from "../../WalletHelpers/contractAbiRaffle.json";
 import { ethers, utils } from "ethers";
-import Countdown from "react-countdown";
+import Countdown, { zeroPad } from "react-countdown";
 import Link from "next/link";
 import { BounceLoader } from "react-spinners";
 
@@ -16,6 +16,20 @@ const ListRaffle: React.FC = () => {
   const [raffle, setRaffle] = useState<string[]>([]);
   const context = useWeb3React<any>();
   const { account, provider, chainId } = context;
+
+  const renderer = ({
+    hours,
+    minutes,
+    seconds,
+  }: {
+    hours: any;
+    minutes: any;
+    seconds: any;
+  }) => (
+    <span>
+      {zeroPad(hours)}:{zeroPad(minutes)}:{zeroPad(seconds)}
+    </span>
+  );
 
   useEffect(() => {
     if (!!provider && chainId == targetChainId && !!account) {
@@ -61,6 +75,10 @@ const ListRaffle: React.FC = () => {
       </div>
     );
   }
+
+  const test = (target: any) => {
+    console.log(new Date(target * 1000));
+  };
 
   return (
     <div>
@@ -112,7 +130,9 @@ const ListRaffle: React.FC = () => {
                         <a className="bg-[#996520] block text-center py-3 mt-2 bg-gradient-to-t opacity-90 hover:opacity-100 text-white text-xl rounded-2xl border dark:to-transparent dark:from-transparent dark:border-2 transition-all">
                           View raffle
                           <div className="text-xs">
-                            Ends in <Countdown date={parseInt(item[1])} />
+                            <Countdown
+                              date={new Date(parseInt(item[1]) * 1000)}
+                            />
                           </div>
                         </a>
                       </Link>
