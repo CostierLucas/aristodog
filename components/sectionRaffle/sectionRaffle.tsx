@@ -18,7 +18,7 @@ const SectionRaffle: React.FC = () => {
   const [isParticipants, setIsParticipants] = useState<boolean>(false);
   const [isSelected, setIsSelected] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [startDate, setStartDate] = useState<string>("");
+  const [startDate, setStartDate] = useState<number>(0);
   const context = useWeb3React<any>();
   const { account, provider, chainId } = context;
   const router = useRouter();
@@ -159,9 +159,7 @@ const SectionRaffle: React.FC = () => {
                   <span className="text-sm"> Raffle start date </span>
                   <br />
                   <span className="text-lg">
-                    {new Date(
-                      Date.now() - raffleItem[0] * 1000
-                    ).toLocaleString()}
+                    {new Date(startDate).toLocaleString()}
                   </span>
                 </div>
               </div>
