@@ -1,15 +1,16 @@
 import { NextPage } from "next";
 import Header from "../../components/header/header";
 import MyRaffles from "../../components/myRaffles/myRaffles";
-import SectionRaffle from "../../components/sectionRaffle/sectionRaffle";
+import Entries from "../../components/participations/entries";
 
-const MyRafflePage: NextPage = () => {
+const Dashboard: NextPage = () => {
   return (
     <>
       <Header />
       <MyRaffles />
+      <Entries />
     </>
   );
 };
 
-export default MyRafflePage;
+export default Dashboard;

@@ -77,9 +77,9 @@ const Header: React.FC = () => {
                 </Link>
               </li>
               <li className="text-gray-600 hover:text-blue-600">
-                <Link href="/myRaffles">
+                <Link href="/dashboard">
                   <a className="cursor-pointer hover:bg-orange-600 text-white hover:text-white px-5 py-2 mr-3 rounded-md text-xl font-medium">
-                    My raffles
+                    Dashboard
                   </a>
                 </Link>
               </li>
