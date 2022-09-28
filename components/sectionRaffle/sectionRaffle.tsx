@@ -8,6 +8,7 @@ import ContractAbiRaffle from "../../WalletHelpers/contractAbiRaffle.json";
 import { ethers } from "ethers";
 import { BeatLoader } from "react-spinners";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 const SectionRaffle: React.FC = () => {
   const [signer, setSigner] = useState<ethers.Signer>();
@@ -15,7 +16,9 @@ const SectionRaffle: React.FC = () => {
   const [raffleItem, setRaffleItem] = useState([]);
   const [numberOfTickets, setNumberOfTickets] = useState<number>(1);
   const [isParticipants, setIsParticipants] = useState<boolean>(false);
+  const [isSelected, setIsSelected] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [startDate, setStartDate] = useState<string>("");
   const context = useWeb3React<any>();
   const { account, provider, chainId } = context;
   const router = useRouter();
@@ -53,15 +56,20 @@ const SectionRaffle: React.FC = () => {
   };
 
   const enterRaffle = async () => {
+    setIsLoading(true);
     let total = raffleItem[4] * numberOfTickets;
     try {
       const tx = await isContract?.enterRaffle(raffle, numberOfTickets, {
         value: total.toString(),
       });
-      const receipt = await tx.wait();
+      await tx.wait();
+      setIsLoading(false);
+      toast.success("You have successfully entered the raffle!");
     } catch (e) {
-      console.log(e);
+      setIsLoading(false);
+      toast.error("Something went wrong!");
     }
+    setIsLoading(false);
   };
 
   const addNumberOfTickets = () => {
@@ -120,11 +128,61 @@ const SectionRaffle: React.FC = () => {
                 className="w-full bg-orange-400 rounded-lg text-white py-3 text-xl font-bold hover:bg-orange-500 transition duration-300"
                 onClick={enterRaffle}
               >
-                Enter Raffle
+                {isLoading ? (
+                  <BeatLoader color={"#fff"} size={10} />
+                ) : (
+                  "Enter Raffle"
+                )}
               </button>
             </div>
           </div>
-          <div className="lg:w-2/3 bg-white dark:bg-offbase md:rounded-2xl p-8 mt-5 md:mt-0 transition"></div>
+          <div className="lg:w-2/3 bg-white dark:bg-offbase md:rounded-2xl p-8 mt-5 md:mt-0 transition">
+            <div className="flex gap-5">
+              <div className="text-xl font-bold">
+                <button className="text-orange-400"> Details </button>
+              </div>
+              {/* <div className="text-xl font-bold">
+                <button className="text-orange-400"> Participants </button>
+              </div> */}
+            </div>
+            <hr className="mt-3" />
+            <div className="mt-5">
+              <div className="flex justify-between">
+                <div className="text-xl font-bold">
+                  <span className="text-sm"> Raffle ended on </span>
+                  <br />
+                  <span className="text-lg">
+                    {new Date(raffleItem[1] * 1000).toLocaleString()}
+                  </span>
+                </div>
+                <div className="text-xl font-bold">
+                  <span className="text-sm"> Raffle start date </span>
+                  <br />
+                  <span className="text-lg">
+                    {new Date(
+                      Date.now() - raffleItem[0] * 1000
+                    ).toLocaleString()}
+                  </span>
+                </div>
+              </div>
+              <div className="flex justify-between mt-5">
+                <div className="text-xl font-bold">
+                  <span className="text-sm">Raffle price</span>
+                  <br />
+                  <span className="text-2xl">
+                    {raffleItem[4] / 10 ** 18} CRO
+                  </span>
+                </div>
+                <div className="text-xl font-bold">
+                  <span className="text-sm">Tickets sold</span>
+                  <br />
+                  <span className="text-2xl">
+                    {parseInt(raffleItem[6])} / {parseInt(raffleItem[5])}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
