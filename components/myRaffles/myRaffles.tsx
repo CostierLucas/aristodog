@@ -74,7 +74,12 @@ const MyRaffles: React.FC = () => {
                 <div key={index} className="lazyload-wrapper ">
                   <div className="card rounded-2xl overflow-hidden group md:hover:scale-[1.03] transition">
                     <div className="relative">
-                      <div className=" aspect-w-1 aspect-h-1 cursor-pointer">
+                      <div className=" aspect-w-1 aspect-h-1 cursor-pointer relative">
+                        <div className="absolute right-2 top-1 bg-white bg-opacity-50 pl-2 pr-2 rounded-2xl">
+                          <p className="text-white">
+                            ID : {raffle.length - index}{" "}
+                          </p>
+                        </div>
                         <img
                           className="h-full object-center object-cover"
                           src="/bayc.png"
