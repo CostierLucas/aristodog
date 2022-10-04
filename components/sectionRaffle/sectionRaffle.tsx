@@ -15,7 +15,7 @@ const SectionRaffle: React.FC = () => {
   const [isContract, setIsContract] = useState<ethers.Contract>();
   const [raffleItem, setRaffleItem] = useState([]);
   const [numberOfTickets, setNumberOfTickets] = useState<number>(1);
-  const [isParticipants, setIsParticipants] = useState<boolean>(false);
+  const [isParticipants, setIsParticipants] = useState("");
   const [isSelected, setIsSelected] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [startDate, setStartDate] = useState<number>(0);
@@ -37,16 +37,18 @@ const SectionRaffle: React.FC = () => {
       ContractAbiRaffle,
       getSigner
     );
-    let participantsArray = [];
 
     try {
-      const raffleItem = await contract.raffle(raffle);
-      console.log(raffleItem[8].toString());
+      const raffleItem = await contract.getRaffleInfo(raffle);
 
-      for (let i = 0; i < raffleItem[9].length; i++) {
-        participantsArray.push(raffleItem[9][i]);
-      }
+      const count = raffleItem[9].reduce(
+        (accumulator: { [x: string]: any }, value: string | number) => {
+          return { ...accumulator, [value]: (accumulator[value] || 0) + 1 };
+        },
+        {}
+      );
 
+      setIsParticipants(count);
       setRaffleItem(raffleItem);
     } catch (e) {
       console.log(e);
@@ -139,47 +141,83 @@ const SectionRaffle: React.FC = () => {
           <div className="lg:w-2/3 bg-white dark:bg-offbase md:rounded-2xl p-8 mt-5 md:mt-0 transition">
             <div className="flex gap-5">
               <div className="text-xl font-bold">
-                <button className="text-orange-400"> Details </button>
+                <button
+                  onClick={() => setIsSelected(0)}
+                  className={`${
+                    isSelected == 0 ? "text-orange-400" : "text-black-400"
+                  }`}
+                >
+                  Details
+                </button>
               </div>
-              {/* <div className="text-xl font-bold">
-                <button className="text-orange-400"> Participants </button>
-              </div> */}
+              <div className="text-xl font-bold">
+                <button
+                  onClick={() => setIsSelected(1)}
+                  className={`${
+                    isSelected == 1 ? "text-orange-400" : "text-black-400"
+                  }`}
+                >
+                  Participants
+                </button>
+              </div>
             </div>
             <hr className="mt-3" />
-            <div className="mt-5">
-              <div className="flex justify-between">
-                <div className="text-xl font-bold">
-                  <span className="text-sm"> Raffle ended on </span>
-                  <br />
-                  <span className="text-lg">
-                    {new Date(raffleItem[1] * 1000).toLocaleString()}
-                  </span>
+            {isSelected == 0 && (
+              <div className="mt-5">
+                <div className="flex justify-between">
+                  <div className="text-xl font-bold">
+                    <span className="text-sm"> Raffle ended on </span>
+                    <br />
+                    <span className="text-lg">
+                      {new Date(raffleItem[1] * 1000).toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="text-xl font-bold">
+                    <span className="text-sm"> Raffle start date </span>
+                    <br />
+                    <span className="text-lg">
+                      {new Date(startDate).toLocaleString()}
+                    </span>
+                  </div>
                 </div>
-                <div className="text-xl font-bold">
-                  <span className="text-sm"> Raffle start date </span>
-                  <br />
-                  <span className="text-lg">
-                    {new Date(startDate).toLocaleString()}
-                  </span>
+                <div className="flex justify-between mt-5">
+                  <div className="text-xl font-bold">
+                    <span className="text-sm">Raffle price</span>
+                    <br />
+                    <span className="text-2xl">
+                      {raffleItem[4] / 10 ** 18} CRO
+                    </span>
+                  </div>
+                  <div className="text-xl font-bold">
+                    <span className="text-sm">Tickets sold</span>
+                    <br />
+                    <span className="text-2xl">
+                      {parseInt(raffleItem[6])} / {parseInt(raffleItem[5])}
+                    </span>
+                  </div>
                 </div>
               </div>
-              <div className="flex justify-between mt-5">
-                <div className="text-xl font-bold">
-                  <span className="text-sm">Raffle price</span>
-                  <br />
-                  <span className="text-2xl">
-                    {raffleItem[4] / 10 ** 18} CRO
-                  </span>
-                </div>
-                <div className="text-xl font-bold">
-                  <span className="text-sm">Tickets sold</span>
-                  <br />
-                  <span className="text-2xl">
-                    {parseInt(raffleItem[6])} / {parseInt(raffleItem[5])}
-                  </span>
-                </div>
+            )}
+            {isSelected == 1 && (
+              <div className="mt-5">
+                <ul className="overflow-scroll">
+                  {Object.keys(isParticipants).map((key) => {
+                    return (
+                      <li key={key} className="flex justify-between">
+                        <div className="text-xl font-bold">
+                          <span className="text-sm"> {key} </span>
+                        </div>
+                        <div className="text-xl font-bold">
+                          <span className="text-sm">
+                            {isParticipants[key as unknown as number]}{" "}
+                          </span>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
