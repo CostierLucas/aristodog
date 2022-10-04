@@ -6,7 +6,7 @@ import {
 } from "../../WalletHelpers/contractVariables";
 import ContractAbiRaffle from "../../WalletHelpers/contractAbiRaffle.json";
 import { ethers, utils } from "ethers";
-import Countdown, { zeroPad } from "react-countdown";
+import Countdown from "react-countdown";
 import Link from "next/link";
 import { BounceLoader } from "react-spinners";
 

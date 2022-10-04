@@ -12,6 +12,7 @@ import { ethers } from "ethers";
 import ModalNft from "../modalNft/modalNft";
 import { toast } from "react-toastify";
 import { BeatLoader } from "react-spinners";
+import { useRouter } from "next/router";
 
 interface IRaffle {
   price: string;
@@ -23,6 +24,7 @@ interface IRaffle {
 
 const FormRaffle: React.FC = () => {
   const context = useWeb3React<any>();
+  const router = useRouter();
   const { account, provider, chainId } = context;
   const [signer, setSigner] = useState<ethers.Signer>();
   const [isContractRaffle, setIsContractRaffle] = useState<ethers.Contract>();
@@ -38,6 +40,7 @@ const FormRaffle: React.FC = () => {
     timestamp: 0,
   });
   const [isLoading, setLoading] = useState<boolean>(false);
+  const [currentId, setCurrentId] = useState<number>(0);
 
   useEffect(() => {
     if (!!provider && chainId == targetChainId && !!account) {
@@ -62,6 +65,9 @@ const FormRaffle: React.FC = () => {
       account
     );
 
+    const currentId = await contract.raffleID();
+
+    setCurrentId(parseInt(currentId) + 1);
     setSigner(getSigner);
     setIsContractRaffle(contract);
     setIsTokenAllowed(collections);
@@ -115,6 +121,7 @@ const FormRaffle: React.FC = () => {
 
       await tx.wait();
       toast.success("Raffle created");
+      router.push(`/single/?raffle=${currentId}`);
       setLoading(false);
     } catch (e) {
       console.log(e);
