@@ -29,6 +29,7 @@ const FormRaffle: React.FC = () => {
   const [signer, setSigner] = useState<ethers.Signer>();
   const [isContractRaffle, setIsContractRaffle] = useState<ethers.Contract>();
   const [isTokenAllowed, setIsTokenAllowed] = useState<string[] | undefined>();
+  const [arrTokenAllowed, setArrTokenAllowed] = useState<any[]>();
   const [tokenSelected, setTokenSelected] = useState<string>("");
   const [isApproved, setIsApproved] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -56,46 +57,40 @@ const FormRaffle: React.FC = () => {
       getSigner
     );
 
-    if (account) {
-      const allowances = await allowance();
-    }
+    const nftContract = new ethers.Contract(
+      contractAddressNft,
+      ContractAbiNft,
+      getSigner
+    );
 
     const collections = await contract.projectTokensOfWallet(
       contractAddressNft,
       account
     );
 
+    const arrTokenAllowed = [];
+
+    for (let i = 0; i < collections.length; i++) {
+      const isApproved = await nftContract.getApproved(
+        parseInt(collections[i])
+      );
+
+      if (isApproved == "0x0000000000000000000000000000000000000000") {
+        arrTokenAllowed.push([false, parseInt(collections[i])]);
+      } else {
+        arrTokenAllowed.push([true, parseInt(collections[i])]);
+      }
+    }
+
     const currentId = await contract.raffleID();
+
+    console.log(arrTokenAllowed);
 
     setCurrentId(parseInt(currentId) + 1);
     setSigner(getSigner);
     setIsContractRaffle(contract);
     setIsTokenAllowed(collections);
-  };
-
-  const allowance = async () => {
-    const contract = new ethers.Contract(
-      contractAddressNft,
-      ContractAbiNft,
-      provider.getSigner()
-    );
-    const allowance = await contract.isApprovedForAll(
-      account,
-      contractAddressRaffle
-    );
-
-    setIsApproved(allowance);
-  };
-
-  const approve = async () => {
-    setLoading(true);
-    const contract = new ethers.Contract(
-      contractAddressNft,
-      ContractAbiNft,
-      provider.getSigner()
-    );
-    const tx = await contract.setApprovalForAll(contractAddressRaffle, true);
-    setLoading(false);
+    setArrTokenAllowed(arrTokenAllowed);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -127,6 +122,23 @@ const FormRaffle: React.FC = () => {
       console.log(e);
     }
     setLoading(false);
+  };
+
+  const approve = async (tokenId: number) => {
+    const contract = new ethers.Contract(
+      contractAddressNft,
+      ContractAbiNft,
+      provider.getSigner()
+    );
+
+    try {
+      const tx = await contract.approve(contractAddressRaffle, tokenId);
+      await tx.wait();
+      toast.success("Nft approved");
+      getDatas();
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   if (!account) {
@@ -179,6 +191,8 @@ const FormRaffle: React.FC = () => {
                 closeModal={setOpenModal}
                 tokensAllowed={isTokenAllowed}
                 tokenSelected={setTokenSelected}
+                arrTokensAllowed={arrTokenAllowed}
+                approveToken={approve}
               />
             )}
           </div>
@@ -264,24 +278,13 @@ const FormRaffle: React.FC = () => {
             </div>
             <div className="flex flex-col lg:flex-row mt-4 justify-between items-center">
               <div className="w-full lg:w-auto mt-4 lg:mt-0">
-                {isApproved ? (
-                  <button
-                    className="h-[60px] w-full lg:w-auto px-8 md:py-0 bg-gradient-to-t from-lime-600 to-lime-400 border border-lime-500  
+                <button
+                  className="h-[60px] w-full lg:w-auto px-8 md:py-0 bg-gradient-to-t from-lime-600 to-lime-400 border border-lime-500  
                                 opacity-90 hover:opacity-100 rounded-xl text-white text-xl font-bold transition"
-                    type="submit"
-                  >
-                    {isLoading ? <BeatLoader color="#fff" /> : "Create raffle"}
-                  </button>
-                ) : (
-                  <button
-                    className="h-[60px] w-full lg:w-auto px-8 md:py-0 bg-gradient-to-t from-lime-600 to-lime-400 border border-lime-500  
-                                opacity-90 hover:opacity-100 rounded-xl text-white text-xl font-bold transition"
-                    type="button"
-                    onClick={approve}
-                  >
-                    {isLoading ? <BeatLoader color="#fff" /> : "Approve first"}
-                  </button>
-                )}
+                  type="submit"
+                >
+                  {isLoading ? <BeatLoader color="#fff" /> : "Create raffle"}
+                </button>
               </div>
             </div>
           </div>
