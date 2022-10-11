@@ -20,8 +20,8 @@ const ModalNft = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isApproving, setIsApproving] = useState<number>(0);
 
-  const chooseToken = (token: string) => {
-    tokenSelected(parseInt(token));
+  const chooseToken = (token: string, urlImage: string) => {
+    tokenSelected([parseInt(token), urlImage]);
     closeModal();
   };
 
@@ -69,7 +69,9 @@ const ModalNft = ({
                     ) : (
                       <button
                         className=" rounded bg-orange-400 pe-4 pr-4 pl-4 mb-2 mt-3 text-white"
-                        onClick={() => chooseToken(token)}
+                        onClick={() =>
+                          chooseToken(token, arrTokensAllowed[index][2])
+                        }
                       >
                         Choose
                       </button>

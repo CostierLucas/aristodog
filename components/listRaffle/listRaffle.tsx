@@ -47,7 +47,6 @@ const ListRaffle: React.FC = () => {
 
       for (let i = parsedRaffleIndex; i > 0; i--) {
         const raffleItem = await contract.getRaffleInfo(i);
-        const test = await contract.getCollectionsRaffles(raffleItem[3]);
         const getTokenUri = await nftContract.tokenURI(parseInt(raffleItem[0]));
         const fetch = await fetchImage(
           `https://ad.mypinata.cloud/ipfs/${getTokenUri.slice(7)}`
@@ -55,6 +54,8 @@ const ListRaffle: React.FC = () => {
         const lol = [...raffleItem, fetch];
         raffleArray.push(lol);
       }
+
+      console.log(raffleArray);
 
       setRaffle(raffleArray);
     } catch (e) {

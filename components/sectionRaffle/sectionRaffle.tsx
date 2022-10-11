@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useWeb3React } from "@web3-react/core";
 import {
+  contractAddressNft,
   contractAddressRaffle,
   targetChainId,
 } from "../../WalletHelpers/contractVariables";
@@ -9,11 +10,12 @@ import { ethers } from "ethers";
 import { BeatLoader } from "react-spinners";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import ContractAbiNft from "../../WalletHelpers/contractAbiNft.json";
 
 const SectionRaffle: React.FC = () => {
   const [signer, setSigner] = useState<ethers.Signer>();
   const [isContract, setIsContract] = useState<ethers.Contract>();
-  const [raffleItem, setRaffleItem] = useState([]);
+  const [raffleItem, setRaffleItem] = useState<any[]>([]);
   const [numberOfTickets, setNumberOfTickets] = useState<number>(1);
   const [isParticipants, setIsParticipants] = useState("");
   const [isSelected, setIsSelected] = useState<number>(0);
@@ -38,8 +40,19 @@ const SectionRaffle: React.FC = () => {
       getSigner
     );
 
+    const nftContract = new ethers.Contract(
+      contractAddressNft,
+      ContractAbiNft,
+      getSigner
+    );
+
     try {
       const raffleItem = await contract.getRaffleInfo(raffle);
+      const getTokenUri = await nftContract.tokenURI(parseInt(raffleItem[0]));
+
+      const fetch = await fetchImage(
+        `https://ad.mypinata.cloud/ipfs/${getTokenUri.slice(7)}`
+      );
 
       const count = raffleItem[10].reduce(
         (accumulator: { [x: string]: any }, value: string | number) => {
@@ -48,8 +61,10 @@ const SectionRaffle: React.FC = () => {
         {}
       );
 
+      const lol = [...raffleItem, fetch];
+
       setIsParticipants(count);
-      setRaffleItem(raffleItem);
+      setRaffleItem(lol);
     } catch (e) {
       console.log(e);
     }
@@ -85,6 +100,19 @@ const SectionRaffle: React.FC = () => {
     }
   };
 
+  const fetchImage = async (getTokenUri: string) => {
+    try {
+      const imageNft = await fetch(getTokenUri);
+      const imageNftJson = await imageNft.json();
+      let urlImage = `https://ad.mypinata.cloud/ipfs/${imageNftJson.image.slice(
+        7
+      )}`;
+      return urlImage;
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   if (!account) {
     return (
       <div className="fixed h-full w-full flex items-center justify-center ">
@@ -103,7 +131,7 @@ const SectionRaffle: React.FC = () => {
         <div className="w-full flex flex-col lg:flex-row mt-7">
           <div className="w-full lg:w-1/3 md:mr-8 px-8 pt-5 md:pt-0 md:px-0 self-start">
             <div>
-              <img src="/bayc.png" className="w-100" />
+              <img src={raffleItem[12]} className="w-100" />
             </div>
             <div className="flex justify-around mt-5">
               <div>

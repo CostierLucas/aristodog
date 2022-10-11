@@ -30,7 +30,7 @@ const FormRaffle: React.FC = () => {
   const [isContractRaffle, setIsContractRaffle] = useState<ethers.Contract>();
   const [isTokenAllowed, setIsTokenAllowed] = useState<string[] | undefined>();
   const [arrTokenAllowed, setArrTokenAllowed] = useState<any[]>();
-  const [tokenSelected, setTokenSelected] = useState<string>("");
+  const [tokenSelected, setTokenSelected] = useState<string[]>(["", ""]);
   const [isApproved, setIsApproved] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [raffle, setRaffle] = useState<IRaffle>({
@@ -101,7 +101,7 @@ const FormRaffle: React.FC = () => {
     setLoading(true);
 
     try {
-      if (tokenSelected == "") {
+      if (tokenSelected[0] == "") {
         toast.error("choose a nft");
         return;
       }
@@ -109,7 +109,7 @@ const FormRaffle: React.FC = () => {
       const tx = await isContractRaffle?.createRaffle(
         ethers.utils.parseEther(raffle.price).toString(),
         raffle.maxTickets,
-        tokenSelected,
+        tokenSelected[0],
         raffle.timestamp,
         contractAddressNft,
         {
@@ -181,7 +181,7 @@ const FormRaffle: React.FC = () => {
               onClick={() => setOpenModal(!openModal)}
               className="flex flex-col p-8 sm:py-16 justify-center items-center h-full rounded-2xl overflow-hidden text-white dark:text-orange-400/70 border-4 border-white dark:border-primary hover:border-primary bg-offbase cursor-pointer group"
             >
-              {tokenSelected === "" ? (
+              {tokenSelected[0] === "" ? (
                 <div className="flex flex-col items-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -196,7 +196,7 @@ const FormRaffle: React.FC = () => {
                 </div>
               ) : (
                 <img
-                  src="/bayc.png"
+                  src={tokenSelected[1]}
                   alt="nft"
                   className="w-40 h-40 object-cover rounded-full"
                 />
