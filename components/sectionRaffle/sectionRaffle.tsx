@@ -41,7 +41,7 @@ const SectionRaffle: React.FC = () => {
     try {
       const raffleItem = await contract.getRaffleInfo(raffle);
 
-      const count = raffleItem[9].reduce(
+      const count = raffleItem[10].reduce(
         (accumulator: { [x: string]: any }, value: string | number) => {
           return { ...accumulator, [value]: (accumulator[value] || 0) + 1 };
         },
@@ -59,7 +59,7 @@ const SectionRaffle: React.FC = () => {
 
   const enterRaffle = async () => {
     setIsLoading(true);
-    let total = raffleItem[4] * numberOfTickets;
+    let total = raffleItem[5] * numberOfTickets;
     try {
       const tx = await isContract?.enterRaffle(raffle, numberOfTickets, {
         value: total.toString(),
@@ -72,6 +72,7 @@ const SectionRaffle: React.FC = () => {
       toast.error("Something went wrong!");
     }
     setIsLoading(false);
+    getDatas();
   };
 
   const addNumberOfTickets = () => {
@@ -169,7 +170,7 @@ const SectionRaffle: React.FC = () => {
                     <span className="text-sm"> Raffle ended on </span>
                     <br />
                     <span className="text-lg">
-                      {new Date(raffleItem[1] * 1000).toLocaleString()}
+                      {new Date(raffleItem[2] * 1000).toLocaleString()}
                     </span>
                   </div>
                   <div className="text-xl font-bold">
@@ -185,14 +186,14 @@ const SectionRaffle: React.FC = () => {
                     <span className="text-sm">Raffle price</span>
                     <br />
                     <span className="text-2xl">
-                      {raffleItem[4] / 10 ** 18} CRO
+                      {raffleItem[5] / 10 ** 18} CRO
                     </span>
                   </div>
                   <div className="text-xl font-bold">
                     <span className="text-sm">Tickets sold</span>
                     <br />
                     <span className="text-2xl">
-                      {parseInt(raffleItem[6])} / {parseInt(raffleItem[5])}
+                      {parseInt(raffleItem[7])} / {parseInt(raffleItem[6])}
                     </span>
                   </div>
                 </div>

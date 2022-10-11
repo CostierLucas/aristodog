@@ -74,17 +74,20 @@ const FormRaffle: React.FC = () => {
       const isApproved = await nftContract.getApproved(
         parseInt(collections[i])
       );
+      const getTokenUri = await nftContract.tokenURI(parseInt(collections[i]));
+
+      const fetch = await fetchImage(
+        `https://ad.mypinata.cloud/ipfs/${getTokenUri.slice(7)}`
+      );
 
       if (isApproved == "0x0000000000000000000000000000000000000000") {
-        arrTokenAllowed.push([false, parseInt(collections[i])]);
+        arrTokenAllowed.push([false, parseInt(collections[i]), fetch]);
       } else {
-        arrTokenAllowed.push([true, parseInt(collections[i])]);
+        arrTokenAllowed.push([true, parseInt(collections[i]), fetch]);
       }
     }
 
     const currentId = await contract.raffleID();
-
-    console.log(arrTokenAllowed);
 
     setCurrentId(parseInt(currentId) + 1);
     setSigner(getSigner);
@@ -152,6 +155,19 @@ const FormRaffle: React.FC = () => {
       </div>
     );
   }
+
+  const fetchImage = async (getTokenUri: string) => {
+    try {
+      const imageNft = await fetch(getTokenUri);
+      const imageNftJson = await imageNft.json();
+      let urlImage = `https://ad.mypinata.cloud/ipfs/${imageNftJson.image.slice(
+        7
+      )}`;
+      return urlImage;
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <div className="container mx-auto">
