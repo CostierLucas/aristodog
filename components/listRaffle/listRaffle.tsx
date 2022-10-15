@@ -11,6 +11,7 @@ import Countdown from "react-countdown";
 import Link from "next/link";
 import { BounceLoader } from "react-spinners";
 import ContractAbiNft from "../../WalletHelpers/contractAbiNft.json";
+import Renderer from "../countdown/countdown";
 
 const ListRaffle: React.FC = () => {
   const [signer, setSigner] = useState<ethers.Signer>();
@@ -155,6 +156,7 @@ const ListRaffle: React.FC = () => {
                           <div className="text-xs">
                             <Countdown
                               date={new Date(parseInt(item[2]) * 1000)}
+                              renderer={Renderer}
                             />
                           </div>
                         </a>

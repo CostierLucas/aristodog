@@ -8,9 +8,10 @@ import {
 import ContractAbiRaffle from "../../WalletHelpers/contractAbiRaffle.json";
 import { ethers, utils } from "ethers";
 import Link from "next/link";
-import Countdown from "react-countdown";
 import { BounceLoader } from "react-spinners";
 import ContractAbiNft from "../../WalletHelpers/contractAbiNft.json";
+import Countdown from "react-countdown";
+import Renderer from "../countdown/countdown";
 
 const Entries: React.FC = () => {
   const [signer, setSigner] = useState<ethers.Signer>();
@@ -170,6 +171,7 @@ const Entries: React.FC = () => {
                           <div className="text-xs">
                             <Countdown
                               date={new Date(parseInt(item[2]["hex"]) * 1000)}
+                              renderer={Renderer}
                             />
                           </div>
                         </a>
