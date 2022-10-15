@@ -41,21 +41,32 @@ const Entries: React.FC = () => {
 
     try {
       const raffleItem = await contract.getUserRafflesRegistered(account);
-      const getTokenUri = await nftContract.tokenURI(parseInt(raffleItem[0]));
-      let raffleArray = [];
+      let raffleArray: any = [];
 
       for (let i = 0; i < raffleItem.length; i++) {
+        const getTokenUri = await nftContract.tokenURI(parseInt(raffleItem[i]));
         let raffle = await contract.getRaffleInfo(raffleItem[i]);
+
+        let userNumbersOfTickets = await contract.getUserNumberOfTickets(
+          account,
+          raffle[0]
+        );
 
         const fetch = await fetchImage(
           `https://ad.mypinata.cloud/ipfs/${getTokenUri.slice(7)}`
         );
 
         const lol = [...raffle, fetch];
-        raffleArray.push(lol);
+        const lol2 = [...lol, userNumbersOfTickets];
+        raffleArray.push(lol2);
       }
 
-      setRaffle(raffleArray);
+      let raffleArrayFiltered = raffleArray
+        .map(JSON.stringify)
+        .filter((e: any, i: any, a: string | any[]) => i === a.indexOf(e))
+        .map(JSON.parse);
+
+      setRaffle(raffleArrayFiltered);
     } catch (e) {
       console.log(e);
     }
@@ -97,14 +108,16 @@ const Entries: React.FC = () => {
       {raffle.length > 0 ? (
         <>
           <div className="lg:grid-cols-3 xl:grid-cols-4 grid grid-cols-1 gap-6 sm:grid-cols-2 md:gap-8 px-8 mt-10">
-            {raffle.map((item, index) => {
+            {raffle.map((item: any, index) => {
               return (
                 <div key={index} className="lazyload-wrapper ">
                   <div className="card rounded-2xl overflow-hidden group md:hover:scale-[1.03] transition">
                     <div className="relative">
                       <div className=" aspect-w-1 aspect-h-1 cursor-pointer relative">
                         <div className="absolute right-2 top-1 bg-white bg-opacity-50 pl-2 pr-2 rounded-2xl">
-                          <p className="text-white">ID : {parseInt(item[0])}</p>
+                          <p className="text-white">
+                            ID : {parseInt(item[0]["hex"])}
+                          </p>
                         </div>
                         <img
                           className="h-full object-center object-cover"
@@ -116,7 +129,7 @@ const Entries: React.FC = () => {
                       <div className="flex items-center">
                         <a
                           className="line-clamp-1 text-[#665F5F] hover:text-[#DB8511] text-sm mr-1 capitalize"
-                          href={`/single/?raffle=${parseInt(item[0])}`}
+                          href={`/single/?raffle=${parseInt(item[0]["hex"])}`}
                         ></a>
                       </div>
                       <h2 className="text-left text-[#DB8511] line-clamp-1 text-xl"></h2>
@@ -126,7 +139,8 @@ const Entries: React.FC = () => {
                             Tickets Remaining
                           </strong>
                           <div className="text-left leading-none text-[#DB8511] text-xl">
-                            {parseInt(item[7])} / {parseInt(item[6])}
+                            {parseInt(item[7]["hex"])} /
+                            {parseInt(item[6]["hex"])}
                           </div>
                         </div>
                         <div>
@@ -138,12 +152,24 @@ const Entries: React.FC = () => {
                           </div>
                         </div>
                       </div>
-                      <Link href={`/single/?raffle=${item[0]}`}>
+                      <div className="flex justify-between mb-3">
+                        <div>
+                          <strong className="block text-sm text-[#665F5F] font-bold">
+                            Number of tickets
+                          </strong>
+                          <div className="text-left leading-none text-[#DB8511] text-xl">
+                            {parseInt(item[13]["hex"])}
+                          </div>
+                        </div>
+                      </div>
+                      <Link
+                        href={`/single/?raffle=${parseInt(item[0]["hex"])}`}
+                      >
                         <a className="bg-[#996520] block text-center py-3 mt-2 bg-gradient-to-t opacity-90 hover:opacity-100 text-white text-xl rounded-2xl border dark:to-transparent dark:from-transparent dark:border-2 transition-all">
                           View raffle
                           <div className="text-xs">
                             <Countdown
-                              date={new Date(parseInt(item[2]) * 1000)}
+                              date={new Date(parseInt(item[2]["hex"]) * 1000)}
                             />
                           </div>
                         </a>
