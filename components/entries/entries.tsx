@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useWeb3React } from "@web3-react/core";
 import {
-  contractAddressNft,
   contractAddressRaffle,
   targetChainId,
 } from "../../WalletHelpers/contractVariables";
@@ -36,6 +35,7 @@ const Entries: React.FC = () => {
 
     try {
       const raffleItem = await contract.getUserRafflesRegistered(account);
+      const partnersCollections = await contract.getPartnersCollections();
       let raffleArray: any = [];
 
       for (let i = 0; i < raffleItem.length; i++) {
@@ -56,9 +56,13 @@ const Entries: React.FC = () => {
           `https://ipfs.io/ipfs/${getTokenUri.slice(7)}`
         );
 
-        const lol = [...raffle, fetch];
-        const lol2 = [...lol, userNumbersOfTickets];
-        raffleArray.push(lol2);
+        const lol = [
+          ...raffle,
+          fetch,
+          userNumbersOfTickets,
+          partnersCollections.includes(raffle[3]),
+        ];
+        raffleArray.push(lol);
       }
 
       let raffleArrayFiltered = raffleArray
@@ -117,6 +121,11 @@ const Entries: React.FC = () => {
                             ID : {parseInt(item[0]["hex"])}
                           </p>
                         </div>
+                        {item[13] && (
+                          <div className="absolute left-2 top-1 bg-indigo-800 text-white pl-2 pr-2 rounded-2xl">
+                            <p>Partners</p>
+                          </div>
+                        )}
                         <img
                           className="h-full object-center object-cover"
                           src={item[12]}

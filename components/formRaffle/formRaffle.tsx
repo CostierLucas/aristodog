@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import {
   targetChainId,
   contractAddressRaffle,
-  contractAddressNft,
   contractCroAddress,
 } from "../../WalletHelpers/contractVariables";
 import ContractAbiRaffle from "../../WalletHelpers/contractAbiRaffle.json";
@@ -58,6 +57,7 @@ const FormRaffle: React.FC = () => {
     );
 
     const allCollections = await contract.getAllCollections();
+    const partnersCollections = await contract.getPartnersCollections();
 
     const tokensWallet = [];
     const tokensAllowed = [];
@@ -96,6 +96,7 @@ const FormRaffle: React.FC = () => {
             parseInt(collections[j]),
             fetch,
             allCollections[i],
+            partnersCollections.includes(allCollections[i]),
           ]);
         } else {
           tokensWallet.push([
@@ -103,10 +104,13 @@ const FormRaffle: React.FC = () => {
             parseInt(collections[j]),
             fetch,
             allCollections[i],
+            partnersCollections.includes(allCollections[i]),
           ]);
         }
       }
     }
+
+    console.log(tokensWallet);
 
     const currentId = await contract.raffleID();
     setCurrentId(parseInt(currentId) + 1);

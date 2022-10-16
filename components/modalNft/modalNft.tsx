@@ -53,9 +53,14 @@ const ModalNft = ({
             {tokensAllowed ? (
               tokensAllowed?.map((token, index) => (
                 <div
-                  className="card bg-white rounded-2xl overflow-hidden group"
+                  className="card bg-white rounded-2xl overflow-hidden group relative"
                   key={index}
                 >
+                  {arrTokensAllowed[index][4] && (
+                    <div className="absolute left-2 top-1 bg-indigo-800 text-white pl-2 pr-2 rounded-2xl">
+                      <p>Partners</p>
+                    </div>
+                  )}
                   <img src={arrTokensAllowed[index][2]} alt="nft image" />
                   <div className="text-center text-lg font-bold">
                     <p>Token : {parseInt(token)}</p>

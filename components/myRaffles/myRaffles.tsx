@@ -36,6 +36,7 @@ const MyRaffles: React.FC = () => {
 
     try {
       const raffleItem = await contract.getUserRaffleCreated(account);
+      const partnersCollections = await contract.getPartnersCollections();
       let raffleArray = [];
 
       for (let i = 0; i < raffleItem.length; i++) {
@@ -51,7 +52,7 @@ const MyRaffles: React.FC = () => {
           `https://ipfs.io/ipfs/${getTokenUri.slice(7)}`
         );
 
-        const lol = [...raffle, fetch];
+        const lol = [...raffle, fetch, partnersCollections.includes(raffle[3])];
         raffleArray.push(lol);
       }
 
@@ -106,6 +107,11 @@ const MyRaffles: React.FC = () => {
                             ID : {parseInt(item[0])}{" "}
                           </p>
                         </div>
+                        {item[13] && (
+                          <div className="absolute left-2 top-1 bg-indigo-800 text-white pl-2 pr-2 rounded-2xl">
+                            <p>Partners</p>
+                          </div>
+                        )}
                         <img
                           className="h-full object-center object-cover"
                           src={item[12]}
