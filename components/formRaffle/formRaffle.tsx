@@ -193,6 +193,14 @@ const FormRaffle: React.FC = () => {
 
   return (
     <div className="container mx-auto">
+      <div className="mt-5">
+        <button
+          className="bg-orange-400 rounded-lg text-white py-2 pl-4 pr-4 text-xl font-bold hover:bg-orange-500 transition duration-300"
+          onClick={() => router.back()}
+        >
+          Back
+        </button>
+      </div>
       <h1 className="text-center text-white font-bold mt-7 text-5xl">
         CREATE NEW RAFFLE
       </h1>

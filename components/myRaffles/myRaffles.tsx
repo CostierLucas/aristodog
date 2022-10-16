@@ -11,11 +11,13 @@ import Countdown from "react-countdown";
 import { BounceLoader } from "react-spinners";
 import ContractAbiNft from "../../WalletHelpers/contractAbiNft.json";
 import Renderer from "../countdown/countdown";
+import { useRouter } from "next/router";
 
 const MyRaffles: React.FC = () => {
   const [signer, setSigner] = useState<ethers.Signer>();
   const [isContract, setIsContract] = useState<ethers.Contract>();
   const [raffle, setRaffle] = useState<string[][]>([]);
+  const router = useRouter();
   const context = useWeb3React<any>();
   const { account, provider, chainId } = context;
 
@@ -89,6 +91,14 @@ const MyRaffles: React.FC = () => {
 
   return (
     <div>
+      <div className="mt-5">
+        <button
+          className="bg-orange-400 ml-8 rounded-lg text-white py-2 pl-4 pr-4 text-xl font-bold hover:bg-orange-500 transition duration-300"
+          onClick={() => router.back()}
+        >
+          Back
+        </button>
+      </div>
       <h1 className="text-center text-white font-bold mt-7 text-5xl">
         My raffles
       </h1>

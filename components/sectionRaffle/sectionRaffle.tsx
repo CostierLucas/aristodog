@@ -153,6 +153,14 @@ const SectionRaffle: React.FC = () => {
   return (
     <div>
       <div className="container-fluid pl-14 pr-14">
+        <div className="mt-5">
+          <button
+            className="bg-orange-400 rounded-lg text-white py-2 pl-4 pr-4 text-xl font-bold hover:bg-orange-500 transition duration-300"
+            onClick={() => router.back()}
+          >
+            Back
+          </button>
+        </div>
         <div className="w-full flex flex-col lg:flex-row mt-7">
           <div className="w-full lg:w-1/3 md:mr-8 px-8 pt-5 md:pt-0 md:px-0 self-start">
             <div>
