@@ -199,21 +199,21 @@ const SectionRaffle: React.FC = () => {
                   <div className="text-xl font-bold w-full text-center">
                     <span className="text-sm"> Raffle ended on </span>
                     <br />
-                    <span className="text-lg">
+                    <span className="text-xl">
                       {new Date(raffleItem[2] * 1000).toLocaleString()}
                     </span>
                   </div>
                   <div className="text-xl font-bold w-full text-center">
                     <span className="text-sm">Raffle price</span>
                     <br />
-                    <span className="text-2xl">
+                    <span className="text-xl">
                       {raffleItem[5] / 10 ** 18} CRO
                     </span>
                   </div>
                   <div className="text-xl font-bold w-full text-center">
                     <span className="text-sm">Tickets sold</span>
                     <br />
-                    <span className="text-2xl">
+                    <span className="text-xl">
                       {parseInt(raffleItem[7])} / {parseInt(raffleItem[6])}
                     </span>
                   </div>
