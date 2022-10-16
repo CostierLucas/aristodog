@@ -19,8 +19,11 @@ const SectionRaffle: React.FC = () => {
   const [isParticipants, setIsParticipants] = useState("");
   const [isSelected, setIsSelected] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isDrawLoading, setIsDrawLoading] = useState<boolean>(false);
   const [startDate, setStartDate] = useState<number>(0);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [calculateFees, setCalculateFees] = useState<string[]>([]);
+  const [winner, setWinner] = useState<string>("");
   const context = useWeb3React<any>();
   const { account, provider, chainId } = context;
   const router = useRouter();
@@ -42,7 +45,8 @@ const SectionRaffle: React.FC = () => {
 
     try {
       const raffleItem = await contract.getRaffleInfo(raffle);
-
+      const admin = await contract.isAdmin(account);
+      console.log(admin);
       const nftContract = new ethers.Contract(
         raffleItem[3],
         ContractAbiNft,
@@ -65,6 +69,7 @@ const SectionRaffle: React.FC = () => {
 
       const lol = [...raffleItem, fetch];
 
+      setIsAdmin(admin);
       setCalculateFees(calculate[1]);
       setIsParticipants(count);
       setRaffleItem(lol);
@@ -113,6 +118,24 @@ const SectionRaffle: React.FC = () => {
     } catch (e) {
       console.log(e);
     }
+  };
+
+  const drawRaffle = async (raffleId: number) => {
+    setIsDrawLoading(true);
+    try {
+      const tx = await isContract?.drawRaffle(raffleId);
+      await tx.wait();
+      setWinner(tx);
+      setIsDrawLoading(false);
+      toast.success("You have successfully drawn the raffle!");
+      console.log(tx);
+    } catch (e) {
+      console.log(e);
+      setIsLoading(false);
+      toast.error("Something went wrong!");
+    }
+    setIsDrawLoading(false);
+    getDatas();
   };
 
   if (!account) {
@@ -252,6 +275,29 @@ const SectionRaffle: React.FC = () => {
                     </tbody>
                   </table>
                 </div>
+                {isAdmin && (
+                  <div className="mt-10">
+                    <div className="text-center mb-3">
+                      <span className="text-xl text-center font-bold">
+                        Admin actions
+                      </span>
+                    </div>
+                    <div className="w-full text-center">
+                      <div className="text-center">
+                        <button
+                          className="w-1/2 bg-orange-400 rounded-lg text-white py-3 text-xl font-bold hover:bg-orange-500 transition duration-300"
+                          onClick={() => drawRaffle(parseInt(raffleItem[0]))}
+                        >
+                          {isDrawLoading ? (
+                            <BeatLoader color={"#fff"} size={10} />
+                          ) : (
+                            "Draw Winner"
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
             {isSelected == 1 && (
