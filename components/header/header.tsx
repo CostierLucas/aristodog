@@ -1,9 +1,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import ConnectWallet from "../connectWallet/connectWallet";
+import { useWeb3React } from "@web3-react/core";
 
 const Header: React.FC = () => {
+  const context = useWeb3React<any>();
   const [navbar, setNavbar] = useState(false);
+  const { connector, account } = context;
 
   return (
     <nav className="w-full bg-orange-400 shadow">
@@ -86,6 +89,16 @@ const Header: React.FC = () => {
               <li>
                 <ConnectWallet />
               </li>
+              {account && (
+                <li>
+                  <span
+                    className=" cursor-pointer text-white"
+                    onClick={() => void connector.deactivate()}
+                  >
+                    Log out
+                  </span>
+                </li>
+              )}
             </ul>
           </div>
         </div>
