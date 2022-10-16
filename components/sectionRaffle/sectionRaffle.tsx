@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useWeb3React } from "@web3-react/core";
 import {
-  contractAddressNft,
   contractAddressRaffle,
   targetChainId,
 } from "../../WalletHelpers/contractVariables";
@@ -196,31 +195,22 @@ const SectionRaffle: React.FC = () => {
             <hr className="mt-3" />
             {isSelected == 0 && (
               <div className="mt-5">
-                <div className="flex justify-between">
-                  <div className="text-xl font-bold">
+                <div className="flex justify-between mt-5">
+                  <div className="text-xl font-bold w-full text-center">
                     <span className="text-sm"> Raffle ended on </span>
                     <br />
                     <span className="text-lg">
                       {new Date(raffleItem[2] * 1000).toLocaleString()}
                     </span>
                   </div>
-                  <div className="text-xl font-bold">
-                    <span className="text-sm"> Raffle start date </span>
-                    <br />
-                    <span className="text-lg">
-                      {new Date(startDate * 1000).toLocaleString()}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex justify-between mt-5">
-                  <div className="text-xl font-bold">
+                  <div className="text-xl font-bold w-full text-center">
                     <span className="text-sm">Raffle price</span>
                     <br />
                     <span className="text-2xl">
                       {raffleItem[5] / 10 ** 18} CRO
                     </span>
                   </div>
-                  <div className="text-xl font-bold">
+                  <div className="text-xl font-bold w-full text-center">
                     <span className="text-sm">Tickets sold</span>
                     <br />
                     <span className="text-2xl">

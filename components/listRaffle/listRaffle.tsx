@@ -102,13 +102,13 @@ const ListRaffle: React.FC = () => {
           <h1 className="text-center text-white font-bold mt-7 text-5xl">
             HOSTING RAFFLES
           </h1>
-          <div className="px-8">
+          {/* <div className="px-8">
             <select>
               <option value="1">All</option>
               <option value="2">Active</option>
               <option value="3">Ended</option>
             </select>
-          </div>
+          </div> */}
           <div className="lg:grid-cols-3 xl:grid-cols-4 grid grid-cols-1 gap-6 sm:grid-cols-2 md:gap-8 px-8 mt-10">
             {raffle.map((item, index) => {
               return (
