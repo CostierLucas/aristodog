@@ -245,7 +245,7 @@ const SectionRaffle: React.FC = () => {
                             key={index}
                             className="text-center border-2 text-sm"
                           >
-                            {parseInt(fee)} %
+                            {parseInt(fee) / 10} %
                           </td>
                         ))}
                       </tr>
