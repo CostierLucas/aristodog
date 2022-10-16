@@ -38,19 +38,18 @@ const ListRaffle: React.FC = () => {
       const raffleIndex = await contract.getCurrentRaffleID();
       const parsedRaffleIndex = parseInt(raffleIndex);
 
-      const nftContract = new ethers.Contract(
-        contractAddressNft,
-        ContractAbiNft,
-        getSigner
-      );
-
       const raffleArray = [];
 
       for (let i = parsedRaffleIndex; i > 0; i--) {
         const raffleItem = await contract.getRaffleInfo(i);
+        const nftContract = new ethers.Contract(
+          raffleItem[3],
+          ContractAbiNft,
+          getSigner
+        );
         const getTokenUri = await nftContract.tokenURI(parseInt(raffleItem[0]));
         const fetch = await fetchImage(
-          `https://ad.mypinata.cloud/ipfs/${getTokenUri.slice(7)}`
+          `https://ipfs.io/ipfs/${getTokenUri.slice(7)}`
         );
         const lol = [...raffleItem, fetch];
         raffleArray.push(lol);
@@ -71,9 +70,7 @@ const ListRaffle: React.FC = () => {
     try {
       const imageNft = await fetch(getTokenUri);
       const imageNftJson = await imageNft.json();
-      let urlImage = `https://ad.mypinata.cloud/ipfs/${imageNftJson.image.slice(
-        7
-      )}`;
+      let urlImage = `https://ipfs.io/ipfs/${imageNftJson.image.slice(7)}`;
       return urlImage;
     } catch (e) {
       console.log(e);

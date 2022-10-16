@@ -20,16 +20,20 @@ const ModalNft = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isApproving, setIsApproving] = useState<number>(0);
 
-  const chooseToken = (token: string, urlImage: string) => {
-    tokenSelected([parseInt(token), urlImage]);
+  const chooseToken = (
+    token: string,
+    urlImage: string,
+    contractNft: string
+  ) => {
+    tokenSelected([parseInt(token), urlImage, contractNft]);
     closeModal();
   };
 
-  const approve = async (token: number) => {
+  const approve = async (token: number, contractNft: string) => {
     setIsApproving(token);
     setIsLoading(true);
     try {
-      const approve = await approveToken(token);
+      const approve = await approveToken(token, contractNft);
     } catch (e) {
       console.log(e);
     }
@@ -58,7 +62,9 @@ const ModalNft = ({
                     {arrTokensAllowed[index][0] == false ? (
                       <button
                         className=" rounded bg-orange-400 pe-4 pr-4 pl-4 mb-2 mt-3 text-white"
-                        onClick={() => approve(parseInt(token))}
+                        onClick={() =>
+                          approve(parseInt(token), arrTokensAllowed[index][3])
+                        }
                       >
                         {isLoading && isApproving == parseInt(token) ? (
                           <BeatLoader color={"#fff"} size={10} />
@@ -70,7 +76,11 @@ const ModalNft = ({
                       <button
                         className=" rounded bg-orange-400 pe-4 pr-4 pl-4 mb-2 mt-3 text-white"
                         onClick={() =>
-                          chooseToken(token, arrTokensAllowed[index][2])
+                          chooseToken(
+                            token,
+                            arrTokensAllowed[index][2],
+                            arrTokensAllowed[index][3]
+                          )
                         }
                       >
                         Choose

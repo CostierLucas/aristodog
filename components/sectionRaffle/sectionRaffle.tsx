@@ -40,18 +40,18 @@ const SectionRaffle: React.FC = () => {
       getSigner
     );
 
-    const nftContract = new ethers.Contract(
-      contractAddressNft,
-      ContractAbiNft,
-      getSigner
-    );
-
     try {
       const raffleItem = await contract.getRaffleInfo(raffle);
+
+      const nftContract = new ethers.Contract(
+        raffleItem[3],
+        ContractAbiNft,
+        getSigner
+      );
       const getTokenUri = await nftContract.tokenURI(parseInt(raffleItem[0]));
 
       const fetch = await fetchImage(
-        `https://ad.mypinata.cloud/ipfs/${getTokenUri.slice(7)}`
+        `https://ipfs.io/ipfs/${getTokenUri.slice(7)}`
       );
 
       const count = raffleItem[10].reduce(
@@ -65,6 +65,7 @@ const SectionRaffle: React.FC = () => {
 
       setIsParticipants(count);
       setRaffleItem(lol);
+      setStartDate(Date.now());
     } catch (e) {
       console.log(e);
     }
@@ -104,9 +105,7 @@ const SectionRaffle: React.FC = () => {
     try {
       const imageNft = await fetch(getTokenUri);
       const imageNftJson = await imageNft.json();
-      let urlImage = `https://ad.mypinata.cloud/ipfs/${imageNftJson.image.slice(
-        7
-      )}`;
+      let urlImage = `https://ipfs.io/ipfs/${imageNftJson.image.slice(7)}`;
       return urlImage;
     } catch (e) {
       console.log(e);
@@ -205,7 +204,7 @@ const SectionRaffle: React.FC = () => {
                     <span className="text-sm"> Raffle start date </span>
                     <br />
                     <span className="text-lg">
-                      {new Date(startDate).toLocaleString()}
+                      {new Date(startDate * 1000).toLocaleString()}
                     </span>
                   </div>
                 </div>

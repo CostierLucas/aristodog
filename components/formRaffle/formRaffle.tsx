@@ -28,8 +28,8 @@ const FormRaffle: React.FC = () => {
   const { account, provider, chainId } = context;
   const [signer, setSigner] = useState<ethers.Signer>();
   const [isContractRaffle, setIsContractRaffle] = useState<ethers.Contract>();
-  const [isTokenAllowed, setIsTokenAllowed] = useState<string[] | undefined>();
-  const [arrTokenAllowed, setArrTokenAllowed] = useState<any[]>();
+  const [isTokenAllowed, setIsTokenAllowed] = useState<any[]>([]);
+  const [arrTokenAllowed, setArrTokenAllowed] = useState<any[]>([]);
   const [tokenSelected, setTokenSelected] = useState<string[]>(["", ""]);
   const [isApproved, setIsApproved] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -57,43 +57,63 @@ const FormRaffle: React.FC = () => {
       getSigner
     );
 
-    const nftContract = new ethers.Contract(
-      contractAddressNft,
-      ContractAbiNft,
-      getSigner
-    );
+    const allCollections = await contract.getAllCollections();
 
-    const collections = await contract.projectTokensOfWallet(
-      contractAddressNft,
-      account
-    );
+    const tokensWallet = [];
+    const tokensAllowed = [];
 
-    const arrTokenAllowed = [];
-
-    for (let i = 0; i < collections.length; i++) {
-      const isApproved = await nftContract.getApproved(
-        parseInt(collections[i])
-      );
-      const getTokenUri = await nftContract.tokenURI(parseInt(collections[i]));
-
-      const fetch = await fetchImage(
-        `https://ad.mypinata.cloud/ipfs/${getTokenUri.slice(7)}`
+    for (let i = 0; i < allCollections.length; i++) {
+      const collections = await contract.projectTokensOfWallet(
+        allCollections[i],
+        account
       );
 
-      if (isApproved == "0x0000000000000000000000000000000000000000") {
-        arrTokenAllowed.push([false, parseInt(collections[i]), fetch]);
-      } else {
-        arrTokenAllowed.push([true, parseInt(collections[i]), fetch]);
+      for (let j = 0; j < collections.length; j++) {
+        tokensAllowed.push(collections[j]);
+      }
+
+      const nftContract = new ethers.Contract(
+        allCollections[i],
+        ContractAbiNft,
+        getSigner
+      );
+
+      for (let j = 0; j < collections.length; j++) {
+        const isApproved = await nftContract.getApproved(
+          parseInt(collections[j])
+        );
+        const getTokenUri = await nftContract.tokenURI(
+          parseInt(collections[j])
+        );
+
+        const fetch = await fetchImage(
+          `https://ipfs.io/ipfs/${getTokenUri.slice(7)}`
+        );
+
+        if (isApproved == "0x0000000000000000000000000000000000000000") {
+          tokensWallet.push([
+            false,
+            parseInt(collections[j]),
+            fetch,
+            allCollections[i],
+          ]);
+        } else {
+          tokensWallet.push([
+            true,
+            parseInt(collections[j]),
+            fetch,
+            allCollections[i],
+          ]);
+        }
       }
     }
 
     const currentId = await contract.raffleID();
-
     setCurrentId(parseInt(currentId) + 1);
     setSigner(getSigner);
     setIsContractRaffle(contract);
-    setIsTokenAllowed(collections);
-    setArrTokenAllowed(arrTokenAllowed);
+    setIsTokenAllowed(tokensAllowed);
+    setArrTokenAllowed(tokensWallet);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -111,7 +131,7 @@ const FormRaffle: React.FC = () => {
         raffle.maxTickets,
         tokenSelected[0],
         raffle.timestamp,
-        contractAddressNft,
+        tokenSelected[2],
         {
           value: ethers.utils.parseEther("25"),
         }
@@ -127,9 +147,9 @@ const FormRaffle: React.FC = () => {
     setLoading(false);
   };
 
-  const approve = async (tokenId: number) => {
+  const approve = async (tokenId: number, contractNft: string) => {
     const contract = new ethers.Contract(
-      contractAddressNft,
+      contractNft,
       ContractAbiNft,
       provider.getSigner()
     );
@@ -160,9 +180,7 @@ const FormRaffle: React.FC = () => {
     try {
       const imageNft = await fetch(getTokenUri);
       const imageNftJson = await imageNft.json();
-      let urlImage = `https://ad.mypinata.cloud/ipfs/${imageNftJson.image.slice(
-        7
-      )}`;
+      let urlImage = `https://ipfs.io/ipfs/${imageNftJson.image.slice(7)}`;
       return urlImage;
     } catch (e) {
       console.log(e);
