@@ -21,6 +21,7 @@ const SectionRaffle: React.FC = () => {
   const [isSelected, setIsSelected] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [startDate, setStartDate] = useState<number>(0);
+  const [calculateFees, setCalculateFees] = useState<string[]>([]);
   const context = useWeb3React<any>();
   const { account, provider, chainId } = context;
   const router = useRouter();
@@ -49,11 +50,13 @@ const SectionRaffle: React.FC = () => {
         getSigner
       );
       const getTokenUri = await nftContract.tokenURI(parseInt(raffleItem[0]));
+      const calculate = await contract.calculateRaffleFees(
+        parseInt(raffleItem[0])
+      );
 
       const fetch = await fetchImage(
         `https://ipfs.io/ipfs/${getTokenUri.slice(7)}`
       );
-
       const count = raffleItem[10].reduce(
         (accumulator: { [x: string]: any }, value: string | number) => {
           return { ...accumulator, [value]: (accumulator[value] || 0) + 1 };
@@ -63,6 +66,7 @@ const SectionRaffle: React.FC = () => {
 
       const lol = [...raffleItem, fetch];
 
+      setCalculateFees(calculate[1]);
       setIsParticipants(count);
       setRaffleItem(lol);
       setStartDate(Date.now());
@@ -223,6 +227,40 @@ const SectionRaffle: React.FC = () => {
                       {parseInt(raffleItem[7])} / {parseInt(raffleItem[6])}
                     </span>
                   </div>
+                </div>
+                <div className="mt-10">
+                  <div className="text-center mb-3">
+                    <span className="text-xl text-center font-bold">
+                      Table fees
+                    </span>
+                  </div>
+                  <table className="w-full border-2">
+                    <thead className="border-2">
+                      <tr>
+                        <th className="text-center border-2 text-sm font-bold">
+                          DAO
+                        </th>
+                        <th className="text-center border-2 text-sm font-bold">
+                          Owner
+                        </th>
+                        <th className="text-center border-2 text-sm font-bold">
+                          Creators
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        {calculateFees.map((fee, index) => (
+                          <td
+                            key={index}
+                            className="text-center border-2 text-sm"
+                          >
+                            {parseInt(fee)} %
+                          </td>
+                        ))}
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             )}
