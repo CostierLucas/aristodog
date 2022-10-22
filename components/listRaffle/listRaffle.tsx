@@ -158,7 +158,7 @@ const ListRaffle: React.FC = () => {
                           </div>
                         </div>
                       </div>
-                      <Link href={`/single/?raffle=${raffle.length - index}`}>
+                      <Link href={`/single/?raffle=${parseInt(item[0])}`}>
                         <a className="bg-[#996520] block text-center py-3 mt-2 bg-gradient-to-t opacity-90 hover:opacity-100 text-white text-xl rounded-2xl border dark:to-transparent dark:from-transparent dark:border-2 transition-all">
                           View raffle
                           <div className="text-xs">

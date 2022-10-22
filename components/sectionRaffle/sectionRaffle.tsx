@@ -129,8 +129,7 @@ const SectionRaffle: React.FC = () => {
       setIsDrawLoading(false);
       toast.success("You have successfully drawn the raffle!");
       console.log(tx);
-    } catch (e) {
-      console.log(e);
+    } catch (e: any) {
       setIsLoading(false);
       toast.error("Something went wrong!");
     }

@@ -110,8 +110,6 @@ const FormRaffle: React.FC = () => {
       }
     }
 
-    console.log(tokensWallet);
-
     const currentId = await contract.raffleID();
     setCurrentId(parseInt(currentId) + 1);
     setSigner(getSigner);
