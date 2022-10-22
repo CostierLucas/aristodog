@@ -275,8 +275,8 @@ const FormRaffle: React.FC = () => {
                   <input
                     className="border-2 w-full border-primary focus:border-orange-500 dark:focus:border-orange-500  focus:outline-none bg-lightbase dark:bg-transparent p-3 rounded-2xl text-center 
                                         text-primary font-bold text-xl appearance-none"
-                    min="0"
-                    max="5000"
+                    min="20"
+                    max="250"
                     type="number"
                     name="supply"
                     id="supply"
