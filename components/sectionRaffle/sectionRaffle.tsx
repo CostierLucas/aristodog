@@ -261,10 +261,10 @@ const SectionRaffle: React.FC = () => {
                           DAO
                         </th>
                         <th className="text-center border-2 text-sm font-bold">
-                          Owner
+                          Project Owner
                         </th>
                         <th className="text-center border-2 text-sm font-bold">
-                          Creators
+                          Raffle Host / Raffle Creator
                         </th>
                       </tr>
                     </thead>
