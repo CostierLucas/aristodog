@@ -296,16 +296,18 @@ const SectionRaffle: React.FC = () => {
                     </div>
                     <div className="w-full text-center">
                       <div className="text-center">
-                        <button
-                          className="w-1/2 bg-orange-400 rounded-lg text-white py-3 text-xl font-bold hover:bg-orange-500 transition duration-300"
-                          onClick={() => drawRaffle(parseInt(raffleItem[0]))}
-                        >
-                          {isDrawLoading ? (
-                            <BeatLoader color={"#fff"} size={10} />
-                          ) : (
-                            "Draw Winner"
-                          )}
-                        </button>
+                        {Date.now() > raffleItem[2] * 1000 && (
+                          <button
+                            className="w-1/2 bg-orange-400 rounded-lg text-white py-3 text-xl font-bold hover:bg-orange-500 transition duration-300"
+                            onClick={() => drawRaffle(parseInt(raffleItem[0]))}
+                          >
+                            {isDrawLoading ? (
+                              <BeatLoader color={"#fff"} size={10} />
+                            ) : (
+                              "Draw Winner"
+                            )}
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
