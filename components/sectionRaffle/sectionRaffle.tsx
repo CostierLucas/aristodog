@@ -46,7 +46,7 @@ const SectionRaffle: React.FC = () => {
     try {
       const raffleItem = await contract.getRaffleInfo(raffle);
       const admin = await contract.isAdmin(account);
-      console.log(admin);
+      const winner = await contract.getWinner(raffle);
       const nftContract = new ethers.Contract(
         raffleItem[3],
         ContractAbiNft,
@@ -74,6 +74,7 @@ const SectionRaffle: React.FC = () => {
       setIsParticipants(count);
       setRaffleItem(lol);
       setStartDate(Date.now());
+      setWinner(winner);
     } catch (e) {
       console.log(e);
     }
@@ -125,7 +126,6 @@ const SectionRaffle: React.FC = () => {
     try {
       const tx = await isContract?.drawRaffle(raffleId);
       await tx.wait();
-      setWinner(tx);
       setIsDrawLoading(false);
       toast.success("You have successfully drawn the raffle!");
       console.log(tx);
@@ -282,6 +282,11 @@ const SectionRaffle: React.FC = () => {
                     </tbody>
                   </table>
                 </div>
+                {winner !== "0x0000000000000000000000000000000000000000" && (
+                  <div className="mt-10 text-center">
+                    Winner is : {winner} ✅
+                  </div>
+                )}
                 {isAdmin && (
                   <div className="mt-10">
                     <div className="text-center mb-3">
