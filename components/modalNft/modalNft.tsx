@@ -1,6 +1,6 @@
 import { AiFillCloseCircle } from "react-icons/ai";
 import styles from "./modalNft.module.scss";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BeatLoader } from "react-spinners";
 import { BounceLoader } from "react-spinners";
 

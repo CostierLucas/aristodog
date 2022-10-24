@@ -1,7 +1,6 @@
 import { useWeb3React } from "@web3-react/core";
 import { useEffect, useState } from "react";
 import {
-  contractAddressNft,
   contractAddressRaffle,
   targetChainId,
 } from "../../WalletHelpers/contractVariables";
@@ -112,8 +111,8 @@ const ListRaffle: React.FC = () => {
           <div className="lg:grid-cols-3 xl:grid-cols-4 grid grid-cols-1 gap-6 sm:grid-cols-2 md:gap-8 px-8 mt-10">
             {raffle.map((item, index) => {
               return (
-                <div key={index} className="lazyload-wrapper ">
-                  <div className="card rounded-2xl overflow-hidden group md:hover:scale-[1.03] transition">
+                <div key={index} className="lazyload-wrapper">
+                  <div className="card rounded-2xl overflow-hidden md:hover:scale-[1.03] transition">
                     <div className="relative">
                       <div className=" aspect-w-1 aspect-h-1 cursor-pointer relative">
                         <div className="absolute right-2 top-1 bg-white bg-opacity-50 pl-2 pr-2 rounded-2xl">
@@ -126,10 +125,12 @@ const ListRaffle: React.FC = () => {
                             <p>Partners</p>
                           </div>
                         )}
-                        <img
-                          className="h-full object-center object-cover"
-                          src={item[12]}
-                        />
+                        <div style={{ height: "350px", width: "100%" }}>
+                          <img
+                            className="h-full w-full object-center object-cover"
+                            src={item[12]}
+                          />
+                        </div>
                       </div>
                     </div>
                     <div className="p-4 bg-white dark:bg-offbase transition-all overflow-hidden rounded-b-2xl">
