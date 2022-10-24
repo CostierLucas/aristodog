@@ -121,10 +121,12 @@ const MyRaffles: React.FC = () => {
                             <p>Partners</p>
                           </div>
                         )}
-                        <img
-                          className="h-full object-center object-cover"
-                          src={item[12]}
-                        />
+                        <div style={{ height: "350px", width: "100%" }}>
+                          <img
+                            className="h-full w-full object-center object-cover"
+                            src={item[12]}
+                          />
+                        </div>
                       </div>
                     </div>
                     <div className="p-4 bg-white dark:bg-offbase transition-all overflow-hidden rounded-b-2xl">
