@@ -47,7 +47,7 @@ const MyRaffles: React.FC = () => {
           ContractAbiNft,
           getSigner
         );
-        const getTokenUri = await nftContract.tokenURI(parseInt(raffle[0]));
+        const getTokenUri = await nftContract.tokenURI(parseInt(raffle[4]));
 
         const fetch = await fetchImage(
           `https://ipfs.io/ipfs/${getTokenUri.slice(7)}`

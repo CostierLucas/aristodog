@@ -1,6 +1,6 @@
 import { AiFillCloseCircle } from "react-icons/ai";
 import styles from "./modalNft.module.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BeatLoader } from "react-spinners";
 import { BounceLoader } from "react-spinners";
 
@@ -58,7 +58,7 @@ const ModalNft = ({
                 >
                   {arrTokensAllowed[index][4] && (
                     <div className="absolute left-2 top-1 bg-indigo-800 text-white pl-2 pr-2 rounded-2xl">
-                      <p>Partners</p>
+                      <p>Partners : {parseInt(token)}</p>
                     </div>
                   )}
                   <img src={arrTokensAllowed[index][2]} alt="nft image" />

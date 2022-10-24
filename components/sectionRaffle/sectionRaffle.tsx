@@ -45,6 +45,7 @@ const SectionRaffle: React.FC = () => {
 
     try {
       const raffleItem = await contract.getRaffleInfo(raffle);
+      console.log(raffleItem);
       const admin = await contract.isAdmin(account);
       const winner = await contract.getWinner(raffle);
       const nftContract = new ethers.Contract(
@@ -52,7 +53,8 @@ const SectionRaffle: React.FC = () => {
         ContractAbiNft,
         getSigner
       );
-      const getTokenUri = await nftContract.tokenURI(parseInt(raffleItem[0]));
+      const getTokenUri = await nftContract.tokenURI(parseInt(raffleItem[4]));
+      console.log(getTokenUri);
       const calculate = await contract.calculateRaffleFees(
         parseInt(raffleItem[0])
       );

@@ -45,7 +45,7 @@ const Entries: React.FC = () => {
           ContractAbiNft,
           getSigner
         );
-        const getTokenUri = await nftContract.tokenURI(parseInt(raffleItem[i]));
+        const getTokenUri = await nftContract.tokenURI(parseInt(raffle[4]));
 
         let userNumbersOfTickets = await contract.getUserNumberOfTickets(
           account,
