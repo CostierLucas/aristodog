@@ -179,7 +179,6 @@ export const CHAINS: {
   //avalanche
   43113: {
     urls: [
-      "https://speedy-nodes-nyc.moralis.io/ce39abd012a6e12c7f6a4341/avalanche/testnet",
     ].filter((url) => url !== undefined),
     name: "Avalanche FUJI C-Chain",
     nativeCurrency: AVAX,
